@@ -11,9 +11,6 @@
 
 
 
-
-
-
 SELECT
     d.name AS Department,
     e.name AS Employee,
