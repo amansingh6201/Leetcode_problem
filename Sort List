@@ -1,0 +1,61 @@
+#148
+
+
+
+
+
+
+
+class Solution {
+public:
+    ListNode* sortList(ListNode* head) {
+        if (!head || !head->next) return head;
+
+        int n = 0;
+        for (ListNode* p = head; p; p = p->next) n++;
+
+        ListNode dummy(0);
+        dummy.next = head;
+
+        for (int size = 1; size < n; size *= 2) {
+            ListNode* prev = &dummy;
+            ListNode* cur = dummy.next;
+
+            while (cur) {
+                ListNode* left = cur;
+                ListNode* right = split(left, size);
+                cur = split(right, size);
+                prev = merge(left, right, prev);
+            }
+        }
+
+        return dummy.next;
+    }
+
+private:
+    ListNode* split(ListNode* head, int n) {
+        ListNode* cur = head;
+        for (int i = 1; cur && i < n; i++) cur = cur->next;
+        if (!cur) return nullptr;
+        ListNode* next = cur->next;
+        cur->next = nullptr;
+        return next;
+    }
+
+    ListNode* merge(ListNode* l1, ListNode* l2, ListNode* prev) {
+        ListNode* cur = prev;
+        while (l1 && l2) {
+            if (l1->val <= l2->val) {
+                cur->next = l1;
+                l1 = l1->next;
+            } else {
+                cur->next = l2;
+                l2 = l2->next;
+            }
+            cur = cur->next;
+        }
+        cur->next = l1 ? l1 : l2;
+        while (cur->next) cur = cur->next;
+        return cur;
+    }
+};
