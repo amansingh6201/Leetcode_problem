@@ -1,0 +1,43 @@
+#23
+
+
+
+
+
+
+
+
+class Solution {
+public:
+    ListNode* mergeKLists(vector<ListNode*>& lists) {
+         priority_queue<
+            pair<int, ListNode*>,
+            vector<pair<int, ListNode*>>,
+            greater<pair<int, ListNode*>>
+        > pq;
+
+        for (ListNode* node : lists) {
+            if (node != nullptr) {
+                pq.push({node->val, node});
+            }
+        }
+
+        ListNode dummy(0);
+        ListNode* tail = &dummy;
+
+        while (!pq.empty()) {
+            auto [value, node] = pq.top();
+            pq.pop();
+
+            tail->next = node;
+            tail = tail->next;
+
+            if (node->next != nullptr) {
+                pq.push({node->next->val, node->next});
+            }
+        }
+
+        return dummy.next;
+    
+    }
+};
